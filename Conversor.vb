@@ -26,7 +26,7 @@
                             If(ConverteDigitoPorPosicao("DECIMAL", strValor, 3, 12) > 0, " E ", String.Empty)
                     End If
 
-                    'Se o digito for TRÊS e o valor por extenso estiver preenchido,, compara BILHÕES
+                    'Se o digito for TRÊS e o valor por extenso estiver preenchido, compara BILHÕES
                 ElseIf digito = 3 And Not Equals(valorPorExtenso, String.Empty) Then
 
                     If ConverteDigitoPorPosicao("INT32", strValor, 3, 3) = 1 Then
