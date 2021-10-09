@@ -73,7 +73,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Conversor.vb" />
+    <Compile Include="ValorPorExtenso.vb" />
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>

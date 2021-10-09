@@ -4,7 +4,7 @@ Public Class Form1
         If txtNumero.TextLength > 0 Then
             Dim numDecimal As Decimal = txtNumero.Text
             txtValor.Text = numDecimal.ToString("C")
-            txtValorDescri.Text = Conversor.EscreverExtenso(txtValor.Text)
+            txtValorDescri.Text = ValorPorExtenso.Converter(txtValor.Text)
 
         ElseIf txtNumero.TextLength = 0 Then
             txtValor.Clear()

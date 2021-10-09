@@ -1,6 +1,6 @@
-﻿Public Class Conversor
+﻿Public Class ValorPorExtenso
     'Conversor habilitado para escrever até Trilhões
-    Public Shared Function EscreverExtenso(valor As Decimal) As String
+    Public Shared Function Converter(valor As Decimal) As String
         If valor < 0 Or valor >= 1000000000000000 Then
             Return "Valor não suportado pelo sistema."
         ElseIf valor = 0 Then
