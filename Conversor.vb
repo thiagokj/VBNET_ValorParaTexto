@@ -63,22 +63,22 @@
                 If digito = 12 Then
 
                     If valorPorExtenso.Length > 8 Then
-                        Select Case valorPorExtenso.Substring(valorPorExtenso.Length - 6, 6)
+                        Select Case valorSubstring(valorPorExtenso, 6, 6)
                             Case "MILHÃO", "BILHÃO"
                                 valorPorExtenso += " DE"
                         End Select
 
-                        Select Case valorPorExtenso.Substring(valorPorExtenso.Length - 7, 7)
+                        Select Case valorSubstring(valorPorExtenso, 7, 7)
                             Case "MILHÕES", "BILHÕES"
                                 valorPorExtenso += " DE"
                         End Select
 
-                        Select Case valorPorExtenso.Substring(valorPorExtenso.Length - 8, 7)
+                        Select Case valorSubstring(valorPorExtenso, 8, 7)
                             Case "TRILHÕES"
                                 valorPorExtenso += " DE"
                         End Select
 
-                        Select Case valorPorExtenso.Substring(valorPorExtenso.Length - 8, 8)
+                        Select Case valorSubstring(valorPorExtenso, 8, 8)
                             Case "TRILHÕES"
                                 valorPorExtenso += " DE"
                         End Select
@@ -110,6 +110,10 @@
 
             Return valorPorExtenso
         End If
+    End Function
+
+    Private Shared Function valorSubstring(valor As String, ini As Integer, fim As Integer)
+        Return valor.Substring(valor.Length - ini, fim)
     End Function
 
     Private Shared Function ConverteDigitoPorPosicao(tipoValor As String, strValor As String,
@@ -191,6 +195,7 @@
                         Case = 9
                             valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZENOVE"
                     End Select
+
                 Case = 2
                     valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "VINTE"
                 Case = 3
@@ -209,37 +214,38 @@
                     valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "NOVENTA"
             End Select
 
-            'Adiciona preposição 'E' entre 20 a 99
-            If strValor.Substring(1, 1) <> "1" And posicao2 <> 0 _
+            'Adiciona preposição 'E' entre as Dezenas e Unidades
+            If strValor.Substring(1, 1) <> "1" _
+                And posicao2 <> 0 _
                 And valorExtenso <> String.Empty Then
                 valorExtenso += " E "
             End If
 
             'Compara UNIDADES
             If strValor.Substring(1, 1) <> "1" Then
-                    Select Case posicao2
-                        Case = 1
-                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "UM"
-                        Case = 2
-                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DOIS"
-                        Case = 3
-                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "TRÊS"
-                        Case = 4
-                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "QUATRO"
-                        Case = 5
-                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "CINCO"
-                        Case = 6
-                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "SEIS"
-                        Case = 7
-                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "SETE"
-                        Case = 8
-                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "OITO"
-                        Case = 9
-                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "NOVE"
-                    End Select
-                End If
+                Select Case posicao2
+                    Case = 1
+                        valorExtenso += "UM"
+                    Case = 2
+                        valorExtenso += "DOIS"
+                    Case = 3
+                        valorExtenso += "TRÊS"
+                    Case = 4
+                        valorExtenso += "QUATRO"
+                    Case = 5
+                        valorExtenso += "CINCO"
+                    Case = 6
+                        valorExtenso += "SEIS"
+                    Case = 7
+                        valorExtenso += "SETE"
+                    Case = 8
+                        valorExtenso += "OITO"
+                    Case = 9
+                        valorExtenso += "NOVE"
+                End Select
+            End If
 
-                Return valorExtenso
+            Return valorExtenso
             End If
     End Function
 End Class
