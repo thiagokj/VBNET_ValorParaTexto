@@ -79,9 +79,9 @@
                     End If
 
                     Select Case ConverteDigitoPorPosicao("INT64", strValor, 0, 15)
-                        Case Is = 1
+                        Case = 1
                             valorPorExtenso += " REAL"
-                        Case Is > 1
+                        Case > 1
                             valorPorExtenso += " REAIS"
                     End Select
 
@@ -95,9 +95,9 @@
                 If digito = 15 Then
 
                     Select Case ConverteDigitoPorPosicao("INT32", strValor, 16, 2)
-                        Case Is = 1
+                        Case = 1
                             valorPorExtenso += " CENTAVO"
-                        Case Is > 1
+                        Case > 1
                             valorPorExtenso += " CENTAVOS"
                     End Select
 
@@ -110,18 +110,16 @@
 
     Private Shared Function ConverteDigitoPorPosicao(tipoValor As String, strValor As String,
                                                     posicaoIni As Integer, posicaoFim As Integer)
-        If tipoValor = "DECIMAL" Then
-            Return Convert.ToDecimal(strValor.Substring(posicaoIni, posicaoFim))
-
-        ElseIf tipoValor = "INT32" Then
-            Return Convert.ToInt32(strValor.Substring(posicaoIni, posicaoFim))
-
-        ElseIf tipoValor = "INT64" Then
-            Return Convert.ToInt64(strValor.Substring(posicaoIni, posicaoFim))
-
-        Else
-            Return MsgBox("Valor não pode ser comparado")
-        End If
+        Select Case tipoValor
+            Case "DECIMAL"
+                Return Convert.ToDecimal(strValor.Substring(posicaoIni, posicaoFim))
+            Case "INT32"
+                Return Convert.ToInt32(strValor.Substring(posicaoIni, posicaoFim))
+            Case "INT64"
+                Return Convert.ToInt64(strValor.Substring(posicaoIni, posicaoFim))
+            Case Else
+                Return MsgBox("Valor não pode ser comparado")
+        End Select
     End Function
 
     Private Shared Function ComparaDigito(valor As Decimal) As String
