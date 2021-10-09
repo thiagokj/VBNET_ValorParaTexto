@@ -44,6 +44,7 @@
                     If ConverteDigitoPorPosicao("INT32", strValor, 6, 3) = 1 Then
                         valorPorExtenso += " MILHÃO" +
                             If(ConverteDigitoPorPosicao("DECIMAL", strValor, 9, 6) > 0, " E ", String.Empty)
+
                     ElseIf ConverteDigitoPorPosicao("INT32", strValor, 6, 3) > 1 Then
                         valorPorExtenso += " MILHÕES" +
                             If(ConverteDigitoPorPosicao("DECIMAL", strValor, 9, 6) > 0, " E ", String.Empty)
@@ -58,24 +59,29 @@
                     End If
                 End If
 
-                'Se o digito for DOZE, avalia o tamanho do valor por extenso e acrescenta sufixo singular ou plural
+                'Se o digito for DOZE, avalia o tamanho do valor por extenso e acrescenta preposição e sufixo
                 If digito = 12 Then
 
                     If valorPorExtenso.Length > 8 Then
+                        Select Case valorPorExtenso.Substring(valorPorExtenso.Length - 6, 6)
+                            Case "MILHÃO", "BILHÃO"
+                                valorPorExtenso += " DE"
+                        End Select
 
-                        If Equals(valorPorExtenso.Substring(valorPorExtenso.Length - 6, 6), "BILHÃO") _
-                            Or Equals(valorPorExtenso.Substring(valorPorExtenso.Length - 6, 6), "MILHÃO") Then
-                            valorPorExtenso += " DE"
+                        Select Case valorPorExtenso.Substring(valorPorExtenso.Length - 7, 7)
+                            Case "MILHÕES", "BILHÕES"
+                                valorPorExtenso += " DE"
+                        End Select
 
-                        ElseIf Equals(valorPorExtenso.Substring(valorPorExtenso.Length - 7, 7), "BILHÕES") _
-                            Or Equals(valorPorExtenso.Substring(valorPorExtenso.Length - 7, 7), "MILHÕES") _
-                            Or Equals(valorPorExtenso.Substring(valorPorExtenso.Length - 8, 7), "TRILHÕES") Then
-                            valorPorExtenso += " DE"
+                        Select Case valorPorExtenso.Substring(valorPorExtenso.Length - 8, 7)
+                            Case "TRILHÕES"
+                                valorPorExtenso += " DE"
+                        End Select
 
-                        ElseIf Equals(valorPorExtenso.Substring(valorPorExtenso.Length - 8, 8), "TRILHÕES") Then
-                            valorPorExtenso += " DE"
-                        End If
-
+                        Select Case valorPorExtenso.Substring(valorPorExtenso.Length - 8, 8)
+                            Case "TRILHÕES"
+                                valorPorExtenso += " DE"
+                        End Select
                     End If
 
                     Select Case ConverteDigitoPorPosicao("INT64", strValor, 0, 15)
@@ -93,14 +99,12 @@
 
                 'Se o digito for 15, avalia as casas após a virgula
                 If digito = 15 Then
-
                     Select Case ConverteDigitoPorPosicao("INT32", strValor, 16, 2)
                         Case = 1
                             valorPorExtenso += " CENTAVO"
                         Case > 1
                             valorPorExtenso += " CENTAVOS"
                     End Select
-
                 End If
             Next
 
@@ -140,99 +144,102 @@
             Dim posicao2 As Integer = ConverteDigitoPorPosicao("INT32", strValor, 2, 1)
 
             'Compara CENTENAS
-            If posicao0 = 1 Then
-                valorExtenso += If(posicao1 + posicao2 = 0, "CEM", "CENTO")
-            ElseIf posicao0 = 2 Then
-                valorExtenso += "DUZENTOS"
-            ElseIf posicao0 = 3 Then
-                valorExtenso += "TREZENTOS"
-            ElseIf posicao0 = 4 Then
-                valorExtenso += "QUATROCENTOS"
-            ElseIf posicao0 = 5 Then
-                valorExtenso += "QUINHENTOS"
-            ElseIf posicao0 = 6 Then
-                valorExtenso += "SEISCENTOS"
-            ElseIf posicao0 = 7 Then
-                valorExtenso += "SETECENTOS"
-            ElseIf posicao0 = 8 Then
-                valorExtenso += "OITOCENTOS"
-            ElseIf posicao0 = 9 Then
-                valorExtenso += "NOVECENTOS"
-            End If
+            Select Case posicao0
+                Case = 1
+                    valorExtenso += If(posicao1 + posicao2 = 0, "CEM", "CENTO")
+                Case = 2
+                    valorExtenso += "DUZENTOS"
+                Case = 3
+                    valorExtenso += "TREZENTOS"
+                Case = 4
+                    valorExtenso += "QUATROCENTOS"
+                Case = 5
+                    valorExtenso += "QUINHENTOS"
+                Case = 6
+                    valorExtenso += "SEISCENTOS"
+                Case = 7
+                    valorExtenso += "SETECENTOS"
+                Case = 8
+                    valorExtenso += "OITOCENTOS"
+                Case = 9
+                    valorExtenso += "NOVECENTOS"
+            End Select
 
             'Compara DEZENAS
-            If posicao1 = 1 Then
+            Select Case posicao1
+                Case = 1
+                    'Avalia numeros de 10 a 19
+                    Select Case posicao2
+                        Case = 0
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZ"
+                        Case = 1
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "ONZE"
+                        Case = 2
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DOZE"
+                        Case = 3
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "TREZE"
+                        Case = 4
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "QUATORZE"
+                        Case = 5
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "QUINZE"
+                        Case = 6
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZESSEIS"
+                        Case = 7
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZESSETE"
+                        Case = 8
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZOITO"
+                        Case = 9
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZENOVE"
+                    End Select
+                Case = 2
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "VINTE"
+                Case = 3
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "TRINTA"
+                Case = 4
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "QUARENTA"
+                Case = 5
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "CINQUENTA"
+                Case = 6
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "SESSENTA"
+                Case = 7
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "SETENTA"
+                Case = 8
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "OITENTA"
+                Case = 9
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "NOVENTA"
+            End Select
 
-                If posicao2 = 0 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZ"
-                ElseIf posicao2 = 1 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "ONZE"
-                ElseIf posicao2 = 2 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DOZE"
-                ElseIf posicao2 = 3 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "TREZE"
-                ElseIf posicao2 = 4 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "QUATORZE"
-                ElseIf posicao2 = 5 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "QUINZE"
-                ElseIf posicao2 = 6 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZESSEIS"
-                ElseIf posicao2 = 7 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZESSETE"
-                ElseIf posicao2 = 8 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZOITO"
-                ElseIf posicao2 = 9 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZENOVE"
-                End If
-
-            ElseIf posicao1 = 2 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "VINTE"
-            ElseIf posicao1 = 3 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "TRINTA"
-            ElseIf posicao1 = 4 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "QUARENTA"
-            ElseIf posicao1 = 5 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "CINQUENTA"
-            ElseIf posicao1 = 6 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "SESSENTA"
-            ElseIf posicao1 = 7 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "SETENTA"
-            ElseIf posicao1 = 8 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "OITENTA"
-            ElseIf posicao1 = 9 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "NOVENTA"
-            End If
-
-            If Not Equals(strValor.Substring(1, 1), "1") And posicao2 <> 0 _
-                And Not Equals(valorExtenso, String.Empty) Then
+            'Adiciona preposição 'E' entre 20 a 99
+            If strValor.Substring(1, 1) <> "1" And posicao2 <> 0 _
+                And valorExtenso <> String.Empty Then
                 valorExtenso += " E "
             End If
 
             'Compara UNIDADES
-            If Not Equals(strValor.Substring(1, 1), "1") Then
-
-                If posicao2 = 1 Then
-                    valorExtenso += "UM"
-                ElseIf posicao2 = 2 Then
-                    valorExtenso += "DOIS"
-                ElseIf posicao2 = 3 Then
-                    valorExtenso += "TRÊS"
-                ElseIf posicao2 = 4 Then
-                    valorExtenso += "QUATRO"
-                ElseIf posicao2 = 5 Then
-                    valorExtenso += "CINCO"
-                ElseIf posicao2 = 6 Then
-                    valorExtenso += "SEIS"
-                ElseIf posicao2 = 7 Then
-                    valorExtenso += "SETE"
-                ElseIf posicao2 = 8 Then
-                    valorExtenso += "OITO"
-                ElseIf posicao2 = 9 Then
-                    valorExtenso += "NOVE"
+            If strValor.Substring(1, 1) <> "1" Then
+                    Select Case posicao2
+                        Case = 1
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "UM"
+                        Case = 2
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DOIS"
+                        Case = 3
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "TRÊS"
+                        Case = 4
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "QUATRO"
+                        Case = 5
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "CINCO"
+                        Case = 6
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "SEIS"
+                        Case = 7
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "SETE"
+                        Case = 8
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "OITO"
+                        Case = 9
+                            valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "NOVE"
+                    End Select
                 End If
-            End If
 
-            Return valorExtenso
-        End If
+                Return valorExtenso
+            End If
     End Function
 End Class
