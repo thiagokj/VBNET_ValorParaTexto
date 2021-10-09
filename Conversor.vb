@@ -1,6 +1,6 @@
 ﻿Public Class Conversor
     'Conversor habilitado para escrever até Trilhões
-    Public Shared Function EscreverExtenso(valor As Decimal) As String      '
+    Public Shared Function EscreverExtenso(valor As Decimal) As String
         If valor < 0 Or valor >= 1000000000000000 Then
             Return "Valor não suportado pelo sistema."
         ElseIf valor = 0 Then
@@ -14,49 +14,51 @@
             For digito As Integer = 0 To 15 Step 3
                 valorPorExtenso += ComparaDigito(ConverteDigitoPorPosicao("DECIMAL", strValor, digito, 3))
 
-                'Se o digito for ZERO e a variavel contiver dados, compara TRILHÕES
+                'Se o digito for ZERO e o valor por extenso estiver preenchido, compara TRILHÕES
                 If digito = 0 And Not Equals(valorPorExtenso, String.Empty) Then
 
                     If ConverteDigitoPorPosicao("INT32", strValor, 0, 3) = 1 Then
-                        valorPorExtenso += " TRILHÃO" &
+                        valorPorExtenso += " TRILHÃO" +
                             If(ConverteDigitoPorPosicao("DECIMAL", strValor, 3, 12) > 0, " E ", String.Empty)
 
                     ElseIf ConverteDigitoPorPosicao("INT32", strValor, 0, 3) > 1 Then
-                        valorPorExtenso += " TRILHÕES" &
+                        valorPorExtenso += " TRILHÕES" +
                             If(ConverteDigitoPorPosicao("DECIMAL", strValor, 3, 12) > 0, " E ", String.Empty)
                     End If
 
-                    'Se o digito for TRES e a variavel contiver dados, compara BILHÕES
+                    'Se o digito for TRÊS e o valor por extenso estiver preenchido,, compara BILHÕES
                 ElseIf digito = 3 And Not Equals(valorPorExtenso, String.Empty) Then
 
                     If ConverteDigitoPorPosicao("INT32", strValor, 3, 3) = 1 Then
-                        valorPorExtenso += " BILHÃO" &
+                        valorPorExtenso += " BILHÃO" +
                             If(ConverteDigitoPorPosicao("DECIMAL", strValor, 6, 9) > 0, " E ", String.Empty)
 
                     ElseIf ConverteDigitoPorPosicao("INT32", strValor, 3, 3) > 1 Then
-                        valorPorExtenso += " BILHÕES" &
+                        valorPorExtenso += " BILHÕES" +
                             If(ConverteDigitoPorPosicao("DECIMAL", strValor, 6, 9) > 0, " E ", String.Empty)
                     End If
 
-                    'Se o digito for 6 e a variavel contiver dados, compara MILHÕES
+                    'Se o digito for SEIS e o valor por extenso estiver preenchido, compara MILHÕES
                 ElseIf digito = 6 And Not Equals(valorPorExtenso, String.Empty) Then
 
                     If ConverteDigitoPorPosicao("INT32", strValor, 6, 3) = 1 Then
-                        valorPorExtenso += " MILHÃO" &
+                        valorPorExtenso += " MILHÃO" +
                             If(ConverteDigitoPorPosicao("DECIMAL", strValor, 9, 6) > 0, " E ", String.Empty)
                     ElseIf ConverteDigitoPorPosicao("INT32", strValor, 6, 3) > 1 Then
-                        valorPorExtenso += " MILHÕES" &
+                        valorPorExtenso += " MILHÕES" +
                             If(ConverteDigitoPorPosicao("DECIMAL", strValor, 9, 6) > 0, " E ", String.Empty)
                     End If
 
+                    'Se o digito for NOVE e o valor por extenso estiver preenchido, compara MILHARES
                 ElseIf digito = 9 And Not Equals(valorPorExtenso, String.Empty) Then
 
                     If ConverteDigitoPorPosicao("INT32", strValor, 9, 3) > 0 Then
-                        valorPorExtenso += " MIL" &
+                        valorPorExtenso += " MIL" +
                             If(ConverteDigitoPorPosicao("DECIMAL", strValor, 12, 3) > 0, " E ", String.Empty)
                     End If
                 End If
 
+                'Se o digito for DOZE, avalia o tamanho do valor por extenso e acrescenta sufixo singular ou plural
                 If digito = 12 Then
 
                     If valorPorExtenso.Length > 8 Then
@@ -88,6 +90,7 @@
                     End If
                 End If
 
+                'Se o digito for 15, avalia as casas após a virgula
                 If digito = 15 Then
 
                     If ConverteDigitoPorPosicao("INT32", strValor, 16, 2) = 1 Then
@@ -126,7 +129,7 @@
         Else
             Dim valorExtenso As String = String.Empty
 
-            'Se os valor for informado como (0,XX), multiplica para comparar 3 posições
+            'Se o valor for informado como (0,XX), multiplica para comparar 3 posições
             If valor > 0 And valor < 1 Then
                 valor *= 100
             End If
@@ -137,7 +140,7 @@
             Dim posicao1 As Integer = ConverteDigitoPorPosicao("INT32", strValor, 1, 1)
             Dim posicao2 As Integer = ConverteDigitoPorPosicao("INT32", strValor, 2, 1)
 
-            'Compara CENTENA
+            'Compara CENTENAS
             If posicao0 = 1 Then
                 valorExtenso += If(posicao1 + posicao2 = 0, "CEM", "CENTO")
             ElseIf posicao0 = 2 Then
@@ -158,47 +161,47 @@
                 valorExtenso += "NOVECENTOS"
             End If
 
-            'Compara DEZENA
+            'Compara DEZENAS
             If posicao1 = 1 Then
 
                 If posicao2 = 0 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "DEZ"
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZ"
                 ElseIf posicao2 = 1 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "ONZE"
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "ONZE"
                 ElseIf posicao2 = 2 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "DOZE"
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DOZE"
                 ElseIf posicao2 = 3 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "TREZE"
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "TREZE"
                 ElseIf posicao2 = 4 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "QUATORZE"
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "QUATORZE"
                 ElseIf posicao2 = 5 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "QUINZE"
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "QUINZE"
                 ElseIf posicao2 = 6 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "DEZESSEIS"
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZESSEIS"
                 ElseIf posicao2 = 7 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "DEZESSETE"
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZESSETE"
                 ElseIf posicao2 = 8 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "DEZOITO"
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZOITO"
                 ElseIf posicao2 = 9 Then
-                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "DEZENOVE"
+                    valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "DEZENOVE"
                 End If
 
             ElseIf posicao1 = 2 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "VINTE"
+                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "VINTE"
             ElseIf posicao1 = 3 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "TRINTA"
+                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "TRINTA"
             ElseIf posicao1 = 4 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "QUARENTA"
+                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "QUARENTA"
             ElseIf posicao1 = 5 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "CINQUENTA"
+                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "CINQUENTA"
             ElseIf posicao1 = 6 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "SESSENTA"
+                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "SESSENTA"
             ElseIf posicao1 = 7 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "SETENTA"
+                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "SETENTA"
             ElseIf posicao1 = 8 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "OITENTA"
+                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "OITENTA"
             ElseIf posicao1 = 9 Then
-                valorExtenso += If(posicao0 > 0, " E ", String.Empty) & "NOVENTA"
+                valorExtenso += If(posicao0 > 0, " E ", String.Empty) + "NOVENTA"
             End If
 
             If Not Equals(strValor.Substring(1, 1), "1") And posicao2 <> 0 _
@@ -206,7 +209,7 @@
                 valorExtenso += " E "
             End If
 
-            'Compara UNIDADE
+            'Compara UNIDADES
             If Not Equals(strValor.Substring(1, 1), "1") Then
 
                 If posicao2 = 1 Then
