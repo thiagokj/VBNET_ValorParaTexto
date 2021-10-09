@@ -78,11 +78,12 @@
 
                     End If
 
-                    If ConverteDigitoPorPosicao("INT64", strValor, 0, 15) = 1 Then
-                        valorPorExtenso += " REAL"
-                    ElseIf ConverteDigitoPorPosicao("INT64", strValor, 0, 15) > 1 Then
-                        valorPorExtenso += " REAIS"
-                    End If
+                    Select Case ConverteDigitoPorPosicao("INT64", strValor, 0, 15)
+                        Case Is = 1
+                            valorPorExtenso += " REAL"
+                        Case Is > 1
+                            valorPorExtenso += " REAIS"
+                    End Select
 
                     If ConverteDigitoPorPosicao("INT32", strValor, 16, 2) > 0 _
                         AndAlso Not Equals(valorPorExtenso, String.Empty) Then
@@ -93,12 +94,12 @@
                 'Se o digito for 15, avalia as casas após a virgula
                 If digito = 15 Then
 
-                    If ConverteDigitoPorPosicao("INT32", strValor, 16, 2) = 1 Then
-                        valorPorExtenso += " CENTAVO"
-
-                    ElseIf ConverteDigitoPorPosicao("INT32", strValor, 16, 2) > 1 Then
-                        valorPorExtenso += " CENTAVOS"
-                    End If
+                    Select Case ConverteDigitoPorPosicao("INT32", strValor, 16, 2)
+                        Case Is = 1
+                            valorPorExtenso += " CENTAVO"
+                        Case Is > 1
+                            valorPorExtenso += " CENTAVOS"
+                    End Select
 
                 End If
             Next
