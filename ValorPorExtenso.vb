@@ -63,22 +63,22 @@
                 If digito = 12 Then
 
                     If valorPorExtenso.Length > 8 Then
-                        Select Case valorSubstring(valorPorExtenso, 6, 6)
+                        Select Case ValorSubstring(valorPorExtenso, 6, 6)
                             Case "MILHÃO", "BILHÃO"
                                 valorPorExtenso += " DE"
                         End Select
 
-                        Select Case valorSubstring(valorPorExtenso, 7, 7)
+                        Select Case ValorSubstring(valorPorExtenso, 7, 7)
                             Case "MILHÕES", "BILHÕES"
                                 valorPorExtenso += " DE"
                         End Select
 
-                        Select Case valorSubstring(valorPorExtenso, 8, 7)
+                        Select Case ValorSubstring(valorPorExtenso, 8, 7)
                             Case "TRILHÕES"
                                 valorPorExtenso += " DE"
                         End Select
 
-                        Select Case valorSubstring(valorPorExtenso, 8, 8)
+                        Select Case ValorSubstring(valorPorExtenso, 8, 8)
                             Case "TRILHÕES"
                                 valorPorExtenso += " DE"
                         End Select
@@ -112,7 +112,8 @@
         End If
     End Function
 
-    Private Shared Function valorSubstring(valor As String, ini As Integer, fim As Integer)
+    'Função para recuperar a posição do valor
+    Private Shared Function ValorSubstring(valor As String, ini As Integer, fim As Integer)
         Return valor.Substring(valor.Length - ini, fim)
     End Function
 
