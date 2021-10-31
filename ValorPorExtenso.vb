@@ -111,9 +111,11 @@
             Return valorPorExtenso
         End If
     End Function
+
     Private Shared Function valorSubstring(valor As String, ini As Integer, fim As Integer)
         Return valor.Substring(valor.Length - ini, fim)
     End Function
+
     Private Shared Function ConverteDigitoPorPosicao(tipoValor As String, strValor As String,
                                                      posicaoIni As Integer, posicaoFim As Integer)
         Select Case tipoValor
