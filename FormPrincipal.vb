@@ -5,7 +5,7 @@ Public Class FormPrincipal
             Dim numDecimal As Decimal = txtNumero.Text
             'Converte valor para cultura corrente (R$)
             txtValor.Text = numDecimal.ToString("C")
-            txtValorDescri.Text = ValorPorExtenso.Converter(txtValor.Text)
+            txtValorDescri.Text = ValorPorExtensoV2.Converte(txtValor.Text)
 
         ElseIf txtNumero.TextLength = 0 Then
             txtValor.Clear()
