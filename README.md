@@ -1,5 +1,7 @@
-# TesteValorPorExtensoDotNet
+# VBNET | Valor por extenso
 
-Informe o valor e o mesmo será convertido em texto por extenso.
+Projeto para estudo e revisão de conceitos.
+
+Converte o valor em texto.
 
 Exemplo baseado no post do Macoratti http://www.macoratti.net/09/01/vbn_ext1.htm

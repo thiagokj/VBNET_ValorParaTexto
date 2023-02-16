@@ -247,6 +247,6 @@
             End If
 
             Return valorExtenso
-            End If
+        End If
     End Function
 End Class
